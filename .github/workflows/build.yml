@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 */2 * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/setup-java@v5
+        with:
+          distribution: corretto
+          java-version: 11
+
+      - run: git clone --depth=1 https://github.com/leibnitz27/cfr.git
+      - run: cp -a cfr/. .
+      - run: rm -rf cfr
+
+      - run: mvn package -DskipTests
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: target
+          path: target/
