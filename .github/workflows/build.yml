@@ -14,15 +14,11 @@ jobs:
         with:
           distribution: corretto
           java-version: 11
+          cache: maven
 
       - run: git clone --depth=1 https://github.com/leibnitz27/cfr.git
       - run: cp -a cfr/. .
       - run: rm -rf cfr
-
-      - uses: actions/cache@v5
-        with:
-          path: ~/.m2/repository
-          key: ${{ hashFiles('pom.xml') }}
 
       - run: mvn package -DskipTests
 
